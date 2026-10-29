@@ -133,7 +133,7 @@
 </div>
 
 <script>
-    // تم تضمين المفتاح الجديد الخاص بك هنا مباشرة
+    // مفتاحك الحديث المعزز
     const API_KEY = "AQ.Ab8RN6JMqPJ0n7WSCBMLP9R5X7LBVoPrMC_6NPukGIKe14Ox4w";
 
     const SYSTEM_INSTRUCTION = "أنت مساعد ذكي اسمك 'محور' متكفّل بتقديم إجابات فائقة الدقة في مجالين أساسيين: 1- البرمجة والتقنية. 2- الفقه الإسلامي والعلوم الشرعية. يجب أن تكون إجاباتك الشرعية مبنية على الأدلة وبأسلوب محترم ومتزن، وإجاباتك البرمجية دقيقة ومعززة بأمثلة كود واضحة.";
@@ -148,45 +148,5 @@
         inputElement.value = '';
 
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: `${SYSTEM_INSTRUCTION}\n\nسؤال المستخدم: ${messageText}`
-                        }]
-                    }]
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.error) {
-                appendMessage(`حدث خطأ من الـ API: ${data.error.message}`, 'bot-message');
-            } else if (data.candidates && data.candidates[0].content.parts[0].text) {
-                const botReply = data.candidates[0].content.parts[0].text;
-                appendMessage(botReply, 'bot-message');
-            } else {
-                appendMessage("لم يتم استلام رد صريح، يرجى المحاولة لاحقاً.", 'bot-message');
-            }
-        } catch (error) {
-            appendMessage("تعذر الاتصال بالخادم. تحقق من الاتصال بالشبكة.", 'bot-message');
-            console.error(error);
-        }
-    }
-
-    function appendMessage(text, className) {
-        const messagesContainer = document.getElementById('chatMessages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${className}`;
-        messageDiv.textContent = text;
-        messagesContainer.appendChild(messageDiv);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-</script>
-
-</body>
-</html>
+            // استخدام الرابط المتوافق مع مفاتيح الـ AQ والموديل المطلوب
+            const response = a
