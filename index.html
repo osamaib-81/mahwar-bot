@@ -48,6 +48,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             const botMsgDiv = document.createElement('div');
+            botMsgDiv.className.text = '';
             botMsgDiv.className = 'message bot-message';
             botMsgDiv.textContent = 'جاري التفكير...';
             chatContainer.appendChild(botMsgDiv);
@@ -61,8 +62,7 @@
                 });
 
                 const data = await response.json();
-                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "عذراً، حدث خطأ في استقبال الرد.";
-                botMsgDiv.textContent = reply;
+                botMsgDiv.textContent = data.reply || "عذراً، حدث خطأ في استقبال الرد.";
             } catch (error) {
                 botMsgDiv.textContent = "عذراً، تعذر الاتصال بالسيرفر.";
             }
