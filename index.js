@@ -5,8 +5,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = "ضع_مفتاح_الـ_API_هنا";
-const SYSTEM_INSTRUCTION = "أنت مساعد ذكي اسمه 'محور' . متكفل بتقديم إجابات فائقة الدقة في مجالين أساسيين: 1- البرمجة والتقنية. 2- الفقه الإسلامي والعلوم الشرعية";
+const API_KEY = "ضع_مفتاح_الـ_API_هنا"; // ضع مفتاحك هنا سراً
 
 app.post('/api/chat', async (req, res) => {
     try {
@@ -16,13 +15,15 @@ app.post('/api/chat', async (req, res) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{
-                    parts: [{ text: `${SYSTEM_INSTRUCTION}\n\nالسؤال المستدم: ${message}` }]
+                    parts: [{ text: `أنت مساعد ذكي اسمه 'محور' متخصص في البرمجة والفقه الإسلامي.\n\nالسؤال: ${message}` }]
                 }]
             })
         });
 
         const data = await response.json();
-        res.json(data);
+        const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "عذراً، لم أتمكن من توليد رد.";
+        
+        res.json({ reply: botReply });
     } catch (error) {
         res.status(500).json({ error: "حدث خطأ في الاتصال" });
     }
