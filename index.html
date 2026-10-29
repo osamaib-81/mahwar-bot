@@ -3,37 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محور - مساعد البرمجة والفقه الإسلامي</title>
+    <title>محور - مساعد الذكاء الاصطناعي</title>
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --text-color: #f8fafc;
-            --primary: #3b82f6;
-            --user-msg: #1d4ed8;
+            --primary: #0284c7;
+            --user-msg: #0369a1;
             --bot-msg: #334155;
+            --error-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .chat-container {
             width: 100%;
-            max-width: 800px;
-            height: 90vh;
+            max-width: 900px;
+            height: 85vh;
             background-color: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
             overflow: hidden;
         }
 
@@ -45,9 +53,14 @@
         }
 
         .chat-header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: var(--primary);
+            font-size: 1.6rem;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            font-size: 0.9rem;
+            color: #94a3b8;
         }
 
         .chat-messages {
@@ -56,39 +69,53 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
         .message {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 10px;
-            line-height: 1.5;
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            line-height: 1.6;
+            font-size: 1rem;
             white-space: pre-wrap;
+            word-break: break-word;
         }
 
         .user-message {
-            align-self: flex-end;
+            align-self: flex-start;
             background-color: var(--user-msg);
             color: white;
+            border-bottom-right-radius: 2px;
         }
 
         .bot-message {
-            align-self: flex-start;
+            align-self: flex-end;
             background-color: var(--bot-msg);
             color: var(--text-color);
+            border-bottom-left-radius: 2px;
         }
 
-        .chat-input {
+        .error-message {
+            align-self: center;
+            background-color: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--error-color);
+            color: #fca5a5;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .chat-input-container {
             display: flex;
-            padding: 15px;
+            gap: 10px;
+            padding: 20px;
             background-color: #0f172a;
             border-top: 1px solid #334155;
         }
 
         input[type="text"] {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid #334155;
             border-radius: 8px;
             background-color: #1e293b;
@@ -97,20 +124,29 @@
             font-size: 1rem;
         }
 
+        input[type="text"]:focus {
+            border-color: #38bdf8;
+        }
+
         button {
-            padding: 12px 24px;
-            margin-right: 10px;
+            padding: 14px 28px;
             background-color: var(--primary);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s;
+            font-weight: bold;
+            transition: background 0.2s;
         }
 
         button:hover {
-            background-color: #2563eb;
+            background-color: #0284c7;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -118,35 +154,32 @@
 
 <div class="chat-container">
     <div class="chat-header">
-        <h1>بوت مِحْوَر (Mahwar)</h1>
-        <small>خبير البرمجة والفقه الإسلامي</small>
+        <h1>🤖 بوت "محور" الذكي</h1>
+        <p>مخصص للبرمجة، العلوم الشرعية، والرد بطلاقة باللغة العربية</p>
     </div>
     
     <div class="chat-messages" id="chatMessages">
-        <div class="message bot-message">أهلاً بك! أنا "مِحْوَر"، مساعدك المتخصص في البرمجة والعلوم الشرعية والفقه الإسلامي. كيف يمكنني مساعدتك اليوم؟</div>
+        <div class="message bot-message">أهلاً بك! أنا **محور**، مساعدك الذكي المخصص للبرمجة والعلوم الشرعية. تفضل بطرح سؤالك وسأقوم بالرد عليك فوراً.</div>
     </div>
     
-    <div class="chat-input">
+    <div class="chat-input-container">
         <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') sendMessage()">
-        <button onclick="sendMessage()">إرسال</button>
+        <button id="sendBtn" onclick="sendMessage()">إرسال</button>
     </div>
 </div>
 
 <script>
-    // مفتاحك الحديث المعزز
+    // المفتاح الحالي
     const API_KEY = "AQ.Ab8RN6JMqPJ0n7WSCBMLP9R5X7LBVoPrMC_6NPukGIKe14Ox4w";
 
-    const SYSTEM_INSTRUCTION = "أنت مساعد ذكي اسمك 'محور' متكفّل بتقديم إجابات فائقة الدقة في مجالين أساسيين: 1- البرمجة والتقنية. 2- الفقه الإسلامي والعلوم الشرعية. يجب أن تكون إجاباتك الشرعية مبنية على الأدلة وبأسلوب محترم ومتزن، وإجاباتك البرمجية دقيقة ومعززة بأمثلة كود واضحة.";
+    const SYSTEM_INSTRUCTION = "أنت مساعد ذكي اسمه 'محور'. متكفل بتقديم إجابات فائقة الدقة في مجالين أساسيين: 1- البرمجة والتقنية. 2- الفقه الإسلامي والعلوم الشرعية. أجب بأسلوب راقٍ، واكتُب الإجابات الشرعية مع الأدلة، والإجابات البرمجية مع أكواد واضحة.";
 
     async function sendMessage() {
         const inputElement = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
         const messageText = inputElement.value.trim();
         
         if (!messageText) return;
 
         appendMessage(messageText, 'user-message');
-        inputElement.value = '';
-
-        try {
-            // استخدام الرابط المتوافق مع مفاتيح الـ AQ والموديل المطلوب
-            const response = a
+        inputElement.value
