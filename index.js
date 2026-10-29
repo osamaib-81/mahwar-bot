@@ -5,8 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ضع مفتاح الـ API الخاص بك هنا بين علامتي التنصيص بدلاً من هذه العبارة
-const API_KEY = "ضع_مفتاح_الـ_API_هنا"; 
+// تم وضع مفتاح الـ API الخاص بك هنا مباشرة
+const API_KEY = "AQ.Ab8RN6KtXPPODZtGzaLgAn5cIRZA2Nx3jSbRsEhPRyPa2PaDUQ"; 
 
 app.post('/api/chat', async (req, res) => {
     try {
