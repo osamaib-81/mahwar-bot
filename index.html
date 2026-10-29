@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مساعد محور - للبرمجة والفقه</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; flex-direction: column; height: 90vh; }
+        h2 { text-align: center; color: #2c3e50; }
+        #chat-container { flex: 1; background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow-y: auto; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 15px; border-radius: 15px; max-width: 70%; line-height: 1.5; word-wrap: break-word; }
+        .user-message { background: #007bff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .bot-message { background: #e9ecef; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
+        #input-container { display: flex; gap: 10px; }
+        #user-input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; outline: none; }
+        button { padding: 12px 20px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #218838; }
+    </style>
+</head>
+<body>
 
+    <h2>🤖 بوت محور (للبرمجة والفقه الإسلامي)</h2>
+    <div id="chat-container">
+        <div class="message bot-message">أهلاً بك! أنا مساعدك الذكي "محور". اطرح سؤالك في البرمجة أو الفقه الإسلامي وسأجيبك فوراً.</div>
+    </div>
+    
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="اكتب سؤالك هنا..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">إرسال</button>
+    </div>
+
+    <script>
+        const BACKEND_URL = "https://mahwar-bot.onrender.com/api/chat";
+
+        async function sendMessage() {
+            const inputField = document.getElementById('user-input');
+            const chatContainer = document.getElementById('chat-container');
+            const messageText = inputField.value.trim();
+
+            if (!messageText) return;
+
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message user-message';
+            userMsgDiv.textContent = messageText;
+            chatContainer.appendChild(userMsgDiv);
+
+            inputField.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            const botMsgDiv = document.createElement('div');
+            botMsgDiv.className = 'message bot-message';
+            botMsgDiv.textContent = 'جاري التفكير...';
+            chatContainer.appendChild(botMsgDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: messageText })
+                });
+
+                const data = await response.json();
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "عذراً، حدث خطأ في استقبال الرد.";
+                botMsgDiv.textContent = reply;
+            } catch (error) {
+                botMsgDiv.textContent = "عذراً، تعذر الاتصال بالسيرفر.";
+            }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
